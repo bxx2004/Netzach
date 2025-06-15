@@ -1,0 +1,345 @@
+---- Minecraft Crash Report ----
+// Who set us up the TNT?
+
+Time: 2025-06-15 12:30:32
+Description: Mod loading failures have occurred; consult the issue messages for more details
+
+net.neoforged.neoforge.logging.CrashReportExtender$ModLoadingCrashException: Mod loading has failed
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Render thread
+Stacktrace:
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.world.level.block.state.StateHolder.setValue(StateHolder.java:109) ~[neoforge-21.1.176.jar%23210!/:?] {re:classloading}
+-- Mod loading issue for: netzach --
+Details:
+	Caused by 0: java.lang.ExceptionInInitializerError
+		at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method) ~[?:?] {}
+		at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1160) ~[?:?] {}
+		at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:340) ~[?:?] {}
+		at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newFieldAccessor(MethodHandleAccessorFactory.java:180) ~[?:?] {}
+		at java.base/jdk.internal.reflect.ReflectionFactory.newFieldAccessor(ReflectionFactory.java:144) ~[?:?] {}
+		at java.base/java.lang.reflect.Field.acquireFieldAccessor(Field.java:1185) ~[?:?] {}
+		at java.base/java.lang.reflect.Field.getFieldAccessor(Field.java:1164) ~[?:?] {}
+		at java.base/java.lang.reflect.Field.get(Field.java:442) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.objectInstance_delegate$lambda$11(KClassImpl.kt:128) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.accessor$KClassImpl$Data$lambda6(KClassImpl.kt) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data$$Lambda$6.invoke(Unknown Source) ~[kotlin-reflect-2.1.20.jar%23264!/:2.1.20-release-217] {}
+		at LAYER PLUGIN/kotlin.stdlib/kotlin.SafePublicationLazyImpl.getValue(LazyJVM.kt:122) ~[kotlin-stdlib-2.1.20.jar%23266!/:2.1.20-release-217] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.getObjectInstance(KClassImpl.kt:119) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl.getObjectInstance(KClassImpl.kt:253) ~[?:?] {}
+		at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.getSafeInstance(RegisterUtil.kt:75) ~[%23212!/:?] {re:classloading}
+		at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.access$getSafeInstance(RegisterUtil.kt:18) ~[%23212!/:?] {re:classloading}
+		at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil$registerBlock$$inlined$register$2.get(RegisterUtil.kt:39) ~[%23212!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$0(DeferredRegister.java:215) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$1(DeferredRegister.java:234) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$addEntries$2(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.RegisterEvent.register(RegisterEvent.java:48) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.addEntries(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:26) ~[bus-8.0.2.jar%23171!/:?] {}
+		at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:350) ~[bus-8.0.2.jar%23171!/:?] {}
+		at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:329) ~[bus-8.0.2.jar%23171!/:?] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModContainer.acceptEvent(ModContainer.java:177) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.lambda$postEventWithWrapInModOrder$16(ModLoader.java:379) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[?:?] {re:computing_frames}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModList.forEachModInOrder(ModList.java:174) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWithWrapInModOrder(ModLoader.java:377) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWrapContainerInModOrder(ModLoader.java:368) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.GameData.postRegisterEvents(GameData.java:92) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.internal.CommonModLoader.lambda$begin$0(CommonModLoader.java:54) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?] {}
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?] {}
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?] {}
+		at java.base/java.lang.Thread.run(Thread.java:1570) ~[?:?] {re:mixin}
+
+	Mod file: /D:/冬/project/Netsah/build/classes/java/main/
+	Failure message: Netzach (netzach) encountered an error while dispatching the net.neoforged.neoforge.registries.RegisterEvent event
+		java.lang.ExceptionInInitializerError: null
+	Mod version: 1.0-SNAPSHOT
+	Mod issues URL: <No issues URL found>
+	Exception message: java.lang.IllegalArgumentException: Cannot set property DirectionProperty{name=facing, clazz=class net.minecraft.core.Direction, values=[north, east, south, west, up, down]} as it does not exist in Block{[unregistered]}
+Stacktrace:
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.world.level.block.state.StateHolder.setValue(StateHolder.java:109) ~[neoforge-21.1.176.jar%23210!/:?] {re:classloading}
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.Core.<clinit>(Core.kt:27) ~[%23212!/:?] {re:classloading}
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method) ~[?:?] {}
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1160) ~[?:?] {}
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:340) ~[?:?] {}
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newFieldAccessor(MethodHandleAccessorFactory.java:180) ~[?:?] {}
+	at java.base/jdk.internal.reflect.ReflectionFactory.newFieldAccessor(ReflectionFactory.java:144) ~[?:?] {}
+	at java.base/java.lang.reflect.Field.acquireFieldAccessor(Field.java:1185) ~[?:?] {}
+	at java.base/java.lang.reflect.Field.getFieldAccessor(Field.java:1164) ~[?:?] {}
+	at java.base/java.lang.reflect.Field.get(Field.java:442) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.objectInstance_delegate$lambda$11(KClassImpl.kt:128) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.accessor$KClassImpl$Data$lambda6(KClassImpl.kt) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data$$Lambda$6.invoke(Unknown Source) ~[kotlin-reflect-2.1.20.jar%23264!/:2.1.20-release-217] {}
+	at LAYER PLUGIN/kotlin.stdlib/kotlin.SafePublicationLazyImpl.getValue(LazyJVM.kt:122) ~[kotlin-stdlib-2.1.20.jar%23266!/:2.1.20-release-217] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.getObjectInstance(KClassImpl.kt:119) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl.getObjectInstance(KClassImpl.kt:253) ~[?:?] {}
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.getSafeInstance(RegisterUtil.kt:75) ~[%23212!/:?] {re:classloading}
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.access$getSafeInstance(RegisterUtil.kt:18) ~[%23212!/:?] {re:classloading}
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil$registerBlock$$inlined$register$2.get(RegisterUtil.kt:39) ~[%23212!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$0(DeferredRegister.java:215) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$1(DeferredRegister.java:234) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$addEntries$2(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.RegisterEvent.register(RegisterEvent.java:48) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.addEntries(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:26) ~[bus-8.0.2.jar%23171!/:?] {}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:350) ~[bus-8.0.2.jar%23171!/:?] {}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:329) ~[bus-8.0.2.jar%23171!/:?] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModContainer.acceptEvent(ModContainer.java:177) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.lambda$postEventWithWrapInModOrder$16(ModLoader.java:379) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[?:?] {re:computing_frames}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModList.forEachModInOrder(ModList.java:174) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWithWrapInModOrder(ModLoader.java:377) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWrapContainerInModOrder(ModLoader.java:368) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.GameData.postRegisterEvents(GameData.java:92) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.internal.CommonModLoader.lambda$begin$0(CommonModLoader.java:54) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?] {}
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?] {}
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?] {}
+	at java.base/java.lang.Thread.run(Thread.java:1570) ~[?:?] {re:mixin}
+
+
+-- Mod loading issue for: netzach --
+Details:
+	Caused by 0: java.lang.NoClassDefFoundError: Could not initialize class net.bxx2004.netzach.Core
+		at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.Core2.<clinit>(Core2.kt:20) ~[%23212!/:?] {re:classloading}
+		at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method) ~[?:?] {}
+		at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1160) ~[?:?] {}
+		at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:340) ~[?:?] {}
+		at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newFieldAccessor(MethodHandleAccessorFactory.java:180) ~[?:?] {}
+		at java.base/jdk.internal.reflect.ReflectionFactory.newFieldAccessor(ReflectionFactory.java:144) ~[?:?] {}
+		at java.base/java.lang.reflect.Field.acquireFieldAccessor(Field.java:1185) ~[?:?] {}
+		at java.base/java.lang.reflect.Field.getFieldAccessor(Field.java:1164) ~[?:?] {}
+		at java.base/java.lang.reflect.Field.get(Field.java:442) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.objectInstance_delegate$lambda$11(KClassImpl.kt:128) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.accessor$KClassImpl$Data$lambda6(KClassImpl.kt) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data$$Lambda$6.invoke(Unknown Source) ~[kotlin-reflect-2.1.20.jar%23264!/:2.1.20-release-217] {}
+		at LAYER PLUGIN/kotlin.stdlib/kotlin.SafePublicationLazyImpl.getValue(LazyJVM.kt:122) ~[kotlin-stdlib-2.1.20.jar%23266!/:2.1.20-release-217] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.getObjectInstance(KClassImpl.kt:119) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl.getObjectInstance(KClassImpl.kt:253) ~[?:?] {}
+		at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.getSafeInstance(RegisterUtil.kt:75) ~[%23212!/:?] {re:classloading}
+		at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.access$getSafeInstance(RegisterUtil.kt:18) ~[%23212!/:?] {re:classloading}
+		at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil$registerItem$$inlined$register$3.get(RegisterUtil.kt:52) ~[%23212!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$0(DeferredRegister.java:215) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$1(DeferredRegister.java:234) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$addEntries$2(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.RegisterEvent.register(RegisterEvent.java:48) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.addEntries(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:26) ~[bus-8.0.2.jar%23171!/:?] {}
+		at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:350) ~[bus-8.0.2.jar%23171!/:?] {}
+		at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:329) ~[bus-8.0.2.jar%23171!/:?] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModContainer.acceptEvent(ModContainer.java:177) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.lambda$postEventWithWrapInModOrder$16(ModLoader.java:379) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[?:?] {re:computing_frames}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModList.forEachModInOrder(ModList.java:174) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWithWrapInModOrder(ModLoader.java:377) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWrapContainerInModOrder(ModLoader.java:368) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.GameData.postRegisterEvents(GameData.java:92) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.internal.CommonModLoader.lambda$begin$0(CommonModLoader.java:54) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?] {}
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?] {}
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?] {}
+		at java.base/java.lang.Thread.run(Thread.java:1570) ~[?:?] {re:mixin}
+
+	Mod file: /D:/冬/project/Netsah/build/classes/java/main/
+	Failure message: Netzach (netzach) encountered an error while dispatching the net.neoforged.neoforge.registries.RegisterEvent event
+		java.lang.NoClassDefFoundError: Could not initialize class net.bxx2004.netzach.Core
+	Mod version: 1.0-SNAPSHOT
+	Mod issues URL: <No issues URL found>
+	Exception message: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalArgumentException: Cannot set property DirectionProperty{name=facing, clazz=class net.minecraft.core.Direction, values=[north, east, south, west, up, down]} as it does not exist in Block{[unregistered]} [in thread "modloading-sync-worker"]
+Stacktrace:
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.world.level.block.state.StateHolder.setValue(StateHolder.java:109) ~[neoforge-21.1.176.jar%23210!/:?] {re:classloading}
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.Core.<clinit>(Core.kt:27) ~[%23212!/:?] {re:classloading}
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method) ~[?:?] {}
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1160) ~[?:?] {}
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:340) ~[?:?] {}
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newFieldAccessor(MethodHandleAccessorFactory.java:180) ~[?:?] {}
+	at java.base/jdk.internal.reflect.ReflectionFactory.newFieldAccessor(ReflectionFactory.java:144) ~[?:?] {}
+	at java.base/java.lang.reflect.Field.acquireFieldAccessor(Field.java:1185) ~[?:?] {}
+	at java.base/java.lang.reflect.Field.getFieldAccessor(Field.java:1164) ~[?:?] {}
+	at java.base/java.lang.reflect.Field.get(Field.java:442) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.objectInstance_delegate$lambda$11(KClassImpl.kt:128) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.accessor$KClassImpl$Data$lambda6(KClassImpl.kt) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data$$Lambda$6.invoke(Unknown Source) ~[kotlin-reflect-2.1.20.jar%23264!/:2.1.20-release-217] {}
+	at LAYER PLUGIN/kotlin.stdlib/kotlin.SafePublicationLazyImpl.getValue(LazyJVM.kt:122) ~[kotlin-stdlib-2.1.20.jar%23266!/:2.1.20-release-217] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.getObjectInstance(KClassImpl.kt:119) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl.getObjectInstance(KClassImpl.kt:253) ~[?:?] {}
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.getSafeInstance(RegisterUtil.kt:75) ~[%23212!/:?] {re:classloading}
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.access$getSafeInstance(RegisterUtil.kt:18) ~[%23212!/:?] {re:classloading}
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil$registerBlock$$inlined$register$2.get(RegisterUtil.kt:39) ~[%23212!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$0(DeferredRegister.java:215) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$1(DeferredRegister.java:234) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$addEntries$2(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.RegisterEvent.register(RegisterEvent.java:48) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.addEntries(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:26) ~[bus-8.0.2.jar%23171!/:?] {}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:350) ~[bus-8.0.2.jar%23171!/:?] {}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:329) ~[bus-8.0.2.jar%23171!/:?] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModContainer.acceptEvent(ModContainer.java:177) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.lambda$postEventWithWrapInModOrder$16(ModLoader.java:379) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[?:?] {re:computing_frames}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModList.forEachModInOrder(ModList.java:174) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWithWrapInModOrder(ModLoader.java:377) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWrapContainerInModOrder(ModLoader.java:368) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.GameData.postRegisterEvents(GameData.java:92) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.internal.CommonModLoader.lambda$begin$0(CommonModLoader.java:54) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?] {}
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?] {}
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?] {}
+	at java.base/java.lang.Thread.run(Thread.java:1570) ~[?:?] {re:mixin}
+
+
+-- Mod loading issue for: netzach --
+Details:
+	Caused by 0: java.lang.NoClassDefFoundError: Could not initialize class net.bxx2004.netzach.Core2
+		at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method) ~[?:?] {}
+		at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1160) ~[?:?] {}
+		at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:340) ~[?:?] {}
+		at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newFieldAccessor(MethodHandleAccessorFactory.java:180) ~[?:?] {}
+		at java.base/jdk.internal.reflect.ReflectionFactory.newFieldAccessor(ReflectionFactory.java:144) ~[?:?] {}
+		at java.base/java.lang.reflect.Field.acquireFieldAccessor(Field.java:1185) ~[?:?] {}
+		at java.base/java.lang.reflect.Field.getFieldAccessor(Field.java:1164) ~[?:?] {}
+		at java.base/java.lang.reflect.Field.get(Field.java:442) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.objectInstance_delegate$lambda$11(KClassImpl.kt:128) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.accessor$KClassImpl$Data$lambda6(KClassImpl.kt) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data$$Lambda$6.invoke(Unknown Source) ~[kotlin-reflect-2.1.20.jar%23264!/:2.1.20-release-217] {}
+		at LAYER PLUGIN/kotlin.stdlib/kotlin.SafePublicationLazyImpl.getValue(LazyJVM.kt:122) ~[kotlin-stdlib-2.1.20.jar%23266!/:2.1.20-release-217] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.getObjectInstance(KClassImpl.kt:119) ~[?:?] {}
+		at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl.getObjectInstance(KClassImpl.kt:253) ~[?:?] {}
+		at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.getSafeInstance(RegisterUtil.kt:75) ~[%23212!/:?] {re:classloading}
+		at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.access$getSafeInstance(RegisterUtil.kt:18) ~[%23212!/:?] {re:classloading}
+		at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil$registerCreativeModeTab$$inlined$register$3.get(RegisterUtil.kt:52) ~[%23212!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$0(DeferredRegister.java:215) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$1(DeferredRegister.java:234) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$addEntries$2(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.RegisterEvent.register(RegisterEvent.java:48) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.addEntries(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:26) ~[bus-8.0.2.jar%23171!/:?] {}
+		at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:350) ~[bus-8.0.2.jar%23171!/:?] {}
+		at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:329) ~[bus-8.0.2.jar%23171!/:?] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModContainer.acceptEvent(ModContainer.java:177) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.lambda$postEventWithWrapInModOrder$16(ModLoader.java:379) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[?:?] {re:computing_frames}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModList.forEachModInOrder(ModList.java:174) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWithWrapInModOrder(ModLoader.java:377) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWrapContainerInModOrder(ModLoader.java:368) ~[loader-4.0.39.jar%23167!/:4.0] {}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.GameData.postRegisterEvents(GameData.java:92) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.internal.CommonModLoader.lambda$begin$0(CommonModLoader.java:54) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+		at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?] {}
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?] {}
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?] {}
+		at java.base/java.lang.Thread.run(Thread.java:1570) ~[?:?] {re:mixin}
+
+	Mod file: /D:/冬/project/Netsah/build/classes/java/main/
+	Failure message: Netzach (netzach) encountered an error while dispatching the net.neoforged.neoforge.registries.RegisterEvent event
+		java.lang.NoClassDefFoundError: Could not initialize class net.bxx2004.netzach.Core2
+	Mod version: 1.0-SNAPSHOT
+	Mod issues URL: <No issues URL found>
+	Exception message: java.lang.ExceptionInInitializerError: Exception java.lang.NoClassDefFoundError: Could not initialize class net.bxx2004.netzach.Core [in thread "modloading-sync-worker"]
+Stacktrace:
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.Core2.<clinit>(Core2.kt:20) ~[%23212!/:?] {re:classloading}
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method) ~[?:?] {}
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1160) ~[?:?] {}
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:340) ~[?:?] {}
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newFieldAccessor(MethodHandleAccessorFactory.java:180) ~[?:?] {}
+	at java.base/jdk.internal.reflect.ReflectionFactory.newFieldAccessor(ReflectionFactory.java:144) ~[?:?] {}
+	at java.base/java.lang.reflect.Field.acquireFieldAccessor(Field.java:1185) ~[?:?] {}
+	at java.base/java.lang.reflect.Field.getFieldAccessor(Field.java:1164) ~[?:?] {}
+	at java.base/java.lang.reflect.Field.get(Field.java:442) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.objectInstance_delegate$lambda$11(KClassImpl.kt:128) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.accessor$KClassImpl$Data$lambda6(KClassImpl.kt) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data$$Lambda$6.invoke(Unknown Source) ~[kotlin-reflect-2.1.20.jar%23264!/:2.1.20-release-217] {}
+	at LAYER PLUGIN/kotlin.stdlib/kotlin.SafePublicationLazyImpl.getValue(LazyJVM.kt:122) ~[kotlin-stdlib-2.1.20.jar%23266!/:2.1.20-release-217] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl$Data.getObjectInstance(KClassImpl.kt:119) ~[?:?] {}
+	at LAYER PLUGIN/kotlin.reflect/kotlin.reflect.jvm.internal.KClassImpl.getObjectInstance(KClassImpl.kt:253) ~[?:?] {}
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.getSafeInstance(RegisterUtil.kt:75) ~[%23212!/:?] {re:classloading}
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil.access$getSafeInstance(RegisterUtil.kt:18) ~[%23212!/:?] {re:classloading}
+	at TRANSFORMER/netzach@1.0-SNAPSHOT/net.bxx2004.netzach.core.registry.RegisterUtil$registerItem$$inlined$register$3.get(RegisterUtil.kt:52) ~[%23212!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$0(DeferredRegister.java:215) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$register$1(DeferredRegister.java:234) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.lambda$addEntries$2(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.RegisterEvent.register(RegisterEvent.java:48) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.DeferredRegister.addEntries(DeferredRegister.java:375) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:26) ~[bus-8.0.2.jar%23171!/:?] {}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:350) ~[bus-8.0.2.jar%23171!/:?] {}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:329) ~[bus-8.0.2.jar%23171!/:?] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModContainer.acceptEvent(ModContainer.java:177) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.lambda$postEventWithWrapInModOrder$16(ModLoader.java:379) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[?:?] {re:computing_frames}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModList.forEachModInOrder(ModList.java:174) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWithWrapInModOrder(ModLoader.java:377) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.ModLoader.postEventWrapContainerInModOrder(ModLoader.java:368) ~[loader-4.0.39.jar%23167!/:4.0] {}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.registries.GameData.postRegisterEvents(GameData.java:92) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.176/net.neoforged.neoforge.internal.CommonModLoader.lambda$begin$0(CommonModLoader.java:54) ~[neoforge-21.1.176.jar%23211!/:?] {re:classloading}
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?] {}
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?] {}
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?] {}
+	at java.base/java.lang.Thread.run(Thread.java:1570) ~[?:?] {re:mixin}
+
+
+-- System Details --
+Details:
+	Minecraft Version: 1.21.1
+	Minecraft Version ID: 1.21.1
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 22.0.2, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode, sharing), Oracle Corporation
+	Memory: 240191824 bytes (229 MiB) / 664797184 bytes (634 MiB) up to 4213178368 bytes (4018 MiB)
+	CPUs: 32
+	Processor Vendor: AuthenticAMD
+	Processor Name: AMD Ryzen 9 7945HX with Radeon Graphics        
+	Identifier: AuthenticAMD Family 25 Model 97 Stepping 2
+	Microarchitecture: Zen 3
+	Frequency (GHz): 2.50
+	Number of physical packages: 1
+	Number of physical CPUs: 16
+	Number of logical CPUs: 32
+	Graphics card #0 name: NVIDIA GeForce RTX 4060 Laptop GPU
+	Graphics card #0 vendor: NVIDIA
+	Graphics card #0 VRAM (MiB): 8188.00
+	Graphics card #0 deviceId: VideoController1
+	Graphics card #0 versionInfo: 32.0.15.7283
+	Memory slot #0 capacity (MiB): 8192.00
+	Memory slot #0 clockSpeed (GHz): 5.60
+	Memory slot #0 type: Unknown
+	Memory slot #1 capacity (MiB): 8192.00
+	Memory slot #1 clockSpeed (GHz): 5.60
+	Memory slot #1 type: Unknown
+	Virtual memory max (MiB): 31424.53
+	Virtual memory used (MiB): 23858.80
+	Swap memory total (MiB): 15360.00
+	Swap memory used (MiB): 1046.44
+	Space in storage for jna.tmpdir (MiB): <path not set>
+	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): <path not set>
+	Space in storage for io.netty.native.workdir (MiB): <path not set>
+	Space in storage for java.io.tmpdir (MiB): available: 68776.77, total: 358401.00
+	Space in storage for workdir (MiB): available: 207447.39, total: 616084.00
+	JVM Flags: 4 total; -XX:ThreadPriorityPolicy=1 -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCIProduct -XX:-UnlockExperimentalVMOptions
+	ModLauncher: 11.0.4+main.d2e20e43
+	ModLauncher launch target: forgeclientdev
+	ModLauncher services: 
+		sponge-mixin-0.15.2+mixin.0.8.7.jar mixin PLUGINSERVICE 
+		loader-4.0.39.jar slf4jfixer PLUGINSERVICE 
+		loader-4.0.39.jar runtime_enum_extender PLUGINSERVICE 
+		at-modlauncher-10.0.1.jar accesstransformer PLUGINSERVICE 
+		loader-4.0.39.jar runtimedistcleaner PLUGINSERVICE 
+		modlauncher-11.0.4.jar mixin TRANSFORMATIONSERVICE 
+		modlauncher-11.0.4.jar fml TRANSFORMATIONSERVICE 
+	FML Language Providers: 
+		kotlinforforge@5.8.0
+		javafml@4.0
+		lowcodefml@4.0
+		minecraft@4.0
+	Mod List: 
+		kffmod-neoforge-5.8.0.jar                         |Kotlin For Forge              |kotlinforforge                |5.8.0               |Manifest: NOSIGNATURE
+		mcef-636236-5828243.jar                           |MCEF (Minecraft Chromium Embed|mcef                          |2.1.6-1.21.1        |Manifest: NOSIGNATURE
+		neoforge-21.1.176.jar                             |Minecraft                     |minecraft                     |1.21.1              |Manifest: NOSIGNATURE
+		neoforge-21.1.176.jar                             |NeoForge                      |neoforge                      |21.1.176            |Manifest: NOSIGNATURE
+		main                                              |Netzach                       |netzach                       |1.0-SNAPSHOT        |Manifest: NOSIGNATURE
+	Crash Report UUID: f13cdd6c-b802-49f1-8295-49280aa5809d
+	FML: 4.0.39
+	NeoForge: 21.1.176

@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.bxx2004.netzach.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "netzach.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "TextureManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
