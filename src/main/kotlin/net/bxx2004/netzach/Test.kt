@@ -20,7 +20,7 @@ import org.lwjgl.glfw.GLFW
 @EventBusSubscriber(modid = Netzach.ID)
 object Test {
     val EXAMPLE_MAPPING : Lazy<KeyMapping> = Lazy.of{
-        KeyMapping("key.examplemod.example1",
+        KeyMapping("key.examplemod.example",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_L,
             "key.categories.misc")
