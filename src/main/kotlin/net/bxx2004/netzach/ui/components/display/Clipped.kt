@@ -19,8 +19,8 @@ abstract class Clipped : BaseLayout() {
         delta: Float,
         reader: AttributeReader
     ) {
-        Scissors.push(reader.ax, reader.ay, reader.width, reader.height)
+        //Scissors.push(reader.ax, reader.ay, reader.width, reader.height)
         super.render(context, mouseX, mouseY, delta, reader)
-        Scissors.pop()
+        //Scissors.pop()
     }
 }

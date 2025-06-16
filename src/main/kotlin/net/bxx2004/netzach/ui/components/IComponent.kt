@@ -111,7 +111,7 @@ abstract class IComponent {
     protected abstract fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float, reader: AttributeReader)
 
     fun within(x:Int, y:Int): Boolean{
-        return x>=this.absoluteX() && y>=absoluteY() && x< this.absoluteX()+this.width.getValueCache() && y<this.absoluteY()+this.height.getValueCache();
+        return x>=this.absoluteX() && y>=absoluteY() && x< this.absoluteX()+this.width.v && y<this.absoluteY()+this.height.v
     }
     open fun onOpen(handler: AbstractContainerMenu?){
         //应用GUI缩放
@@ -212,15 +212,15 @@ abstract class IComponent {
         return container?.hit(mouseX,mouseY) == this
     }
     fun absoluteX(): Int{
-        return if (this.container != null){
-            (this.container as IComponent).x.getValueCache() + x.getValueCache()
+        return if (this.container != null && this.container is IComponent){
+            (this.container as IComponent).absoluteX() + x.getValueCache()
         }else{
             x.getValueCache()
         }
     }
     fun absoluteY(): Int{
-        return if (this.container != null){
-            (this.container as IComponent).y.getValueCache() + y.getValueCache()
+        return if (this.container != null&& this.container is IComponent){
+            (this.container as IComponent).absoluteY() + y.getValueCache()
         }else{
             y.getValueCache()
         }

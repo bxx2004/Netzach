@@ -13,8 +13,9 @@ import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW
 import java.util.*
 import kotlin.math.abs
+import kotlin.text.toInt
 
-class TextArea : IComponent() {
+open class TextArea : IComponent() {
     // 文本属性
     var text = ref("")
     var placeholder = ref<Component?>(null)
@@ -28,8 +29,8 @@ class TextArea : IComponent() {
     var focusBorder = ref(nrl("textures/ui/text_area/focus_border.png"))
 
     // 文本布局属性
-    var lineHeight = ref(12)
-    var textWrap = ref(true)
+    open var lineHeight = ref(12)
+    open var textWrap = ref(true)
 
     var isEditable = ref(true)
     var cursorPosition = ref(0)
@@ -42,6 +43,40 @@ class TextArea : IComponent() {
     private var cursorY = 0
     private var cursorLine = 0
 
+    override fun charTyped(chr: Char, modifiers: Int): Boolean {
+        if (isFocus()&& isEditable.getValue()) {
+            if (hasSelection()) {
+                deleteSelection()
+            }
+            insertText(chr.toString())
+        }
+        return super.charTyped(chr, modifiers)
+    }
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (button == 0) { // 左键点击
+            updateCursorPosition(mouseX.toInt(), mouseY.toInt())
+            selectionStart.setValue(cursorPosition.getValue())
+        }
+        return super.mouseClicked(mouseX, mouseY, button)
+    }
+
+    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+        if (button == 0) { // 左键拖动
+            updateCursorPosition(mouseX.toInt(), mouseY.toInt())
+        }
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    }
+
+    override fun mouseScrolled(
+        mouseX: Double,
+        mouseY: Double,
+        horizontalAmount: Double,
+        verticalAmount: Double
+    ): Boolean {
+        scrollOffset.setValue((scrollOffset.getValue() + verticalAmount.toInt()).coerceIn(0, getMaxScroll()))
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
+    }
     init {
         // 光标闪烁定时器
         cursorTimer.scheduleAtFixedRate(object : TimerTask() {
@@ -49,173 +84,11 @@ class TextArea : IComponent() {
                 cursorBlink.setValue((cursorBlink.getValue() + 1) % 20)
             }
         }, 0, 50)
-
-        // 处理文本输入回调
-        callback<CharTypedCallback> {
-            if (isFocus()&& isEditable.getValue()) {
-                if (hasSelection()) {
-                    deleteSelection()
-                }
-                insertText(chr.toString())
-                true
-            } else {
-                false
-            }
-        }
-
-        // 处理键盘输入回调
-        callback<KeyPressCallback> {
-            if (!isFocus() || !isEditable.getValue()) return@callback
-
-            when (keyCode.toInt()) {
-                GLFW.GLFW_KEY_ENTER -> {
-                    if (hasSelection()) deleteSelection()
-                    insertText("\n")
-                    emitter(EnterPressCallback(id.v))
-                    true
-                }
-                GLFW.GLFW_KEY_BACKSPACE -> {
-                    if (hasSelection()) {
-                        deleteSelection()
-                    } else if (cursorPosition.getValue() > 0) {
-                        text.setValue(text.getValue().removeRange(cursorPosition.getValue() - 1, cursorPosition.getValue()))
-                        cursorPosition.setValue(cursorPosition.getValue() - 1)
-                        emitter(TextChangeCallback(id.v,text.v))
-                    }
-                    true
-                }
-                GLFW.GLFW_KEY_DELETE -> {
-                    if (hasSelection()) {
-                        deleteSelection()
-                    } else if (cursorPosition.getValue() < text.getValue().length) {
-                        text.setValue(text.getValue().removeRange(cursorPosition.getValue(), cursorPosition.getValue() + 1))
-                        emitter(TextChangeCallback(id.v,text.v))
-                    }
-                    true
-                }
-                GLFW.GLFW_KEY_LEFT -> {
-                    if (Screen.hasControlDown()) {
-                        moveCursorToPrevWord()
-                    } else {
-                        cursorPosition.setValue((cursorPosition.getValue() - 1).coerceAtLeast(0))
-                    }
-                    if (!Screen.hasShiftDown()) {
-                        selectionStart.setValue(-1)
-                    }
-                    true
-                }
-                GLFW.GLFW_KEY_RIGHT -> {
-                    if (Screen.hasControlDown()) {
-                        moveCursorToNextWord()
-                    } else {
-                        cursorPosition.setValue((cursorPosition.getValue() + 1).coerceAtMost(text.getValue().length))
-                    }
-                    if (!Screen.hasShiftDown()) {
-                        selectionStart.setValue(-1)
-                    }
-                    true
-                }
-                GLFW.GLFW_KEY_UP -> {
-                    moveCursorUp()
-                    if (!Screen.hasShiftDown()) {
-                        selectionStart.setValue(-1)
-                    }
-                    true
-                }
-                GLFW.GLFW_KEY_DOWN -> {
-                    moveCursorDown()
-                    if (!Screen.hasShiftDown()) {
-                        selectionStart.setValue(-1)
-                    }
-                    true
-                }
-                GLFW.GLFW_KEY_HOME -> {
-                    cursorPosition.setValue(getLineStart(cursorLine))
-                    if (!Screen.hasShiftDown()) {
-                        selectionStart.setValue(-1)
-                    }
-                    true
-                }
-                GLFW.GLFW_KEY_END -> {
-                    cursorPosition.setValue(getLineEnd(cursorLine))
-                    if (!Screen.hasShiftDown()) {
-                        selectionStart.setValue(-1)
-                    }
-                    true
-                }
-                GLFW.GLFW_KEY_A -> {
-                    if (Screen.hasControlDown()) {
-                        selectionStart.setValue(0)
-                        cursorPosition.setValue(text.getValue().length)
-                        true
-                    } else {
-                        false
-                    }
-                }
-                GLFW.GLFW_KEY_C -> {
-                    if (Screen.hasControlDown() && hasSelection()) {
-                        val (start, end) = getSelectionRange()
-                        client().keyboardHandler.clipboard = text.getValue().substring(start, end)
-                        true
-                    } else {
-                        false
-                    }
-                }
-                GLFW.GLFW_KEY_V -> {
-                    if (Screen.hasControlDown() && isEditable.getValue()) {
-                        val clipboard = client().keyboardHandler.clipboard ?: return@callback
-                        if (hasSelection()) deleteSelection()
-                        insertText(clipboard)
-                        true
-                    } else {
-                        false
-                    }
-                }
-                GLFW.GLFW_KEY_X -> {
-                    if (Screen.hasControlDown() && hasSelection() && isEditable.getValue()) {
-                        val (start, end) = getSelectionRange()
-                        client().keyboardHandler.clipboard = text.getValue().substring(start, end)
-                        deleteSelection()
-                        true
-                    } else {
-                        false
-                    }
-                }
-                else -> false
-            }
-        }
-
-        // 鼠标点击回调
-        callback<MouseClickCallback> {
-            if (button == 0) { // 左键点击
-                updateCursorPosition(mouseX.toInt(), mouseY.toInt())
-                selectionStart.setValue(cursorPosition.getValue())
-                true
-            } else {
-                false
-            }
-        }
-
-        // 鼠标拖动回调
-        callback<MouseDragCallback> {
-            if (button == 0) { // 左键拖动
-                updateCursorPosition(mouseX.toInt(), mouseY.toInt())
-                true
-            } else {
-                false
-            }
-        }
-
-        // 鼠标滚轮回调
-        callback<MouseScrollCallback> {
-            scrollOffset.setValue((scrollOffset.getValue() + verticalAmount.toInt()).coerceIn(0, getMaxScroll()))
-            true
-        }
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float, reader: AttributeReader) {
-        val x = reader.x
-        val y = reader.y
+        val x = reader.ax
+        val y = reader.ay
         val width = reader.width
         val height = reader.height
 
@@ -433,7 +306,7 @@ class TextArea : IComponent() {
         cursorLine = clickedLine
     }
 
-    private fun getWrappedLines(): List<String> {
+    protected open fun getWrappedLines(): List<String> {
         if (!textWrap.getValue()) {
             return text.getValue().lines().flatMap { line ->
                 if (line.isEmpty()) listOf("") else line.split("\n")
@@ -490,7 +363,7 @@ class TextArea : IComponent() {
         return (getLineCount() - (height.getValue() - 2 * padding.getValue()) / lineHeight.getValue()).coerceAtLeast(0)
     }
 
-    private fun getLineStart(line: Int): Int {
+    protected open fun getLineStart(line: Int): Int {
         val lines = text.getValue().lines()
         if (line <= 0) return 0
         if (line >= lines.size) return text.getValue().length
@@ -502,7 +375,7 @@ class TextArea : IComponent() {
         return pos
     }
 
-    private fun getLineEnd(line: Int): Int {
+    protected open fun getLineEnd(line: Int): Int {
         val lines = text.getValue().lines()
         if (line < 0) return 0
         if (line >= lines.size) return text.getValue().length
@@ -514,7 +387,7 @@ class TextArea : IComponent() {
         return pos
     }
 
-    private fun moveCursorUp() {
+    protected open fun moveCursorUp() {
         val lines = getWrappedLines()
         if (cursorLine > 0) {
             cursorLine--
@@ -542,7 +415,7 @@ class TextArea : IComponent() {
         }
     }
 
-    private fun moveCursorDown() {
+    protected open fun moveCursorDown() {
         val lines = getWrappedLines()
         if (cursorLine < lines.size - 1) {
             cursorLine++
@@ -663,22 +536,144 @@ class TextArea : IComponent() {
     private fun getSelectionRange(): Pair<Int, Int> {
         if (!hasSelection()) return Pair(cursorPosition.getValue(), cursorPosition.getValue())
 
-        return if (selectionStart.getValue() < cursorPosition.getValue()) {
-            Pair(selectionStart.getValue(), cursorPosition.getValue())
+        val start = selectionStart.getValue()
+        val end = cursorPosition.getValue()
+        return if (start < end) {
+            Pair(start, end)
         } else {
-            Pair(cursorPosition.getValue(), selectionStart.getValue())
+            Pair(end, start)
         }
     }
 
     private fun deleteSelection() {
         val (start, end) = getSelectionRange()
-        text.setValue(text.getValue().removeRange(start, end))
-        cursorPosition.setValue(start)
-        selectionStart.setValue(-1)
-        emitter(TextChangeCallback(id.v,text.v))
+        if (start >= 0 && end <= text.getValue().length && start <= end) { // Add validation
+            text.setValue(text.getValue().removeRange(start, end))
+            cursorPosition.setValue(start)
+            selectionStart.setValue(-1)
+            emitter(TextChangeCallback(id.v,text.v))
+        }
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (!isFocus() || !isEditable.getValue()) return false
+
+        when (keyCode.toInt()) {
+            GLFW.GLFW_KEY_ENTER -> {
+                if (hasSelection()) deleteSelection()
+                insertText("\n")
+                emitter(EnterPressCallback(id.v))
+                true
+            }
+            GLFW.GLFW_KEY_BACKSPACE -> {
+                if (hasSelection()) {
+                    deleteSelection()
+                } else if (cursorPosition.getValue() > 0) {
+                    text.setValue(text.getValue().removeRange(cursorPosition.getValue() - 1, cursorPosition.getValue()))
+                    cursorPosition.setValue(cursorPosition.getValue() - 1)
+                    emitter(TextChangeCallback(id.v,text.v))
+                }
+                true
+            }
+            GLFW.GLFW_KEY_DELETE -> {
+                if (hasSelection()) {
+                    deleteSelection()
+                } else if (cursorPosition.getValue() < text.getValue().length) {
+                    text.setValue(text.getValue().removeRange(cursorPosition.getValue(), cursorPosition.getValue() + 1))
+                    emitter(TextChangeCallback(id.v,text.v))
+                }
+                true
+            }
+            GLFW.GLFW_KEY_LEFT -> {
+                if (Screen.hasControlDown()) {
+                    moveCursorToPrevWord()
+                } else {
+                    cursorPosition.setValue((cursorPosition.getValue() - 1).coerceAtLeast(0))
+                }
+                if (!Screen.hasShiftDown()) {
+                    selectionStart.setValue(-1)
+                }
+                true
+            }
+            GLFW.GLFW_KEY_RIGHT -> {
+                if (Screen.hasControlDown()) {
+                    moveCursorToNextWord()
+                } else {
+                    cursorPosition.setValue((cursorPosition.getValue() + 1).coerceAtMost(text.getValue().length))
+                }
+                if (!Screen.hasShiftDown()) {
+                    selectionStart.setValue(-1)
+                }
+                true
+            }
+            GLFW.GLFW_KEY_UP -> {
+                moveCursorUp()
+                if (!Screen.hasShiftDown()) {
+                    selectionStart.setValue(-1)
+                }
+                true
+            }
+            GLFW.GLFW_KEY_DOWN -> {
+                moveCursorDown()
+                if (!Screen.hasShiftDown()) {
+                    selectionStart.setValue(-1)
+                }
+                true
+            }
+            GLFW.GLFW_KEY_HOME -> {
+                cursorPosition.setValue(getLineStart(cursorLine))
+                if (!Screen.hasShiftDown()) {
+                    selectionStart.setValue(-1)
+                }
+                true
+            }
+            GLFW.GLFW_KEY_END -> {
+                cursorPosition.setValue(getLineEnd(cursorLine))
+                if (!Screen.hasShiftDown()) {
+                    selectionStart.setValue(-1)
+                }
+                true
+            }
+            GLFW.GLFW_KEY_A -> {
+                if (Screen.hasControlDown()) {
+                    selectionStart.setValue(0)
+                    cursorPosition.setValue(text.getValue().length)
+                    true
+                } else {
+                    false
+                }
+            }
+            GLFW.GLFW_KEY_C -> {
+                if (Screen.hasControlDown() && hasSelection()) {
+                    val (start, end) = getSelectionRange()
+                    client().keyboardHandler.clipboard = text.getValue().substring(start, end)
+                    true
+                } else {
+                    false
+                }
+            }
+            GLFW.GLFW_KEY_V -> {
+                if (Screen.hasControlDown() && isEditable.getValue()) {
+                    val clipboard = client().keyboardHandler.clipboard ?: return false
+                    if (hasSelection()) deleteSelection()
+                    insertText(clipboard)
+                    true
+                } else {
+                    false
+                }
+            }
+            GLFW.GLFW_KEY_X -> {
+                if (Screen.hasControlDown() && hasSelection() && isEditable.getValue()) {
+                    val (start, end) = getSelectionRange()
+                    client().keyboardHandler.clipboard = text.getValue().substring(start, end)
+                    deleteSelection()
+                    true
+                } else {
+                    false
+                }
+            }
+            else -> false
+        }
         val d = super.keyPressed(keyCode, scanCode, modifiers)
         if (keyCode == GLFW.GLFW_KEY_E){
             return !isFocus()

@@ -1,17 +1,19 @@
 package net.bxx2004.netzach.core.registry
 
+import net.minecraft.client.KeyMapping
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 import org.apache.logging.log4j.LogManager
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import java.util.function.Supplier
-import javax.management.RuntimeErrorException
+import kotlin.collections.set
 import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
@@ -92,11 +94,31 @@ object RegisterUtil {
             }
     }
 
+    private fun registerKey(clazz: Class<*>){
+        clazz.kotlin.memberProperties.forEach { property ->
+            try {
+                val field = clazz.getDeclaredField(property.name).apply { isAccessible = true }
+
+                if (field.type == KeyMapping::class.java) {
+                    MOD_BUS.addListener<RegisterKeyMappingsEvent> {
+                        it.register(field.get(getSafeInstance(clazz,clazz.kotlin)) as KeyMapping)
+                    }
+                }
+            } catch (e: Exception) {
+                logger.error("Failed to register property ${property.name} in ${clazz.name}", e)
+            }
+        }
+    }
+
     fun registerItem(clazz: Class<*>): Map<String, DeferredHolder<Item, *>>? {
         return register(clazz, RegisterFactory.items, Registries.ITEM, Item::class)
     }
 
     fun registerBlock(clazz: Class<*>): Map<String, DeferredHolder<Block, *>>? {
+        return register(clazz, RegisterFactory.blocks, Registries.BLOCK, Block::class)
+    }
+
+    fun registerKeyMapping(clazz: Class<*>): Map<String, DeferredHolder<Block, *>>? {
         return register(clazz, RegisterFactory.blocks, Registries.BLOCK, Block::class)
     }
 

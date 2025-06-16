@@ -57,3 +57,11 @@ fun modData(child: String): File{
     }
     return f
 }
+fun Any?.inferType(): Any? {
+    if (this !is String) return this
+    toIntOrNull()?.let { return it }
+    toLongOrNull()?.let { return it }
+    toDoubleOrNull()?.let { return it }
+    toBooleanStrictOrNull()?.let { return it }
+    return this
+}

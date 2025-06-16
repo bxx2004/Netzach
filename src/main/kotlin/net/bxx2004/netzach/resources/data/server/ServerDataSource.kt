@@ -27,6 +27,9 @@ class ServerDataSource(regiseterId: ResourceLocation) : DataSource {
         register()
     }
 
+    override fun all(): Map<String, Any> {
+        return emptyMap()
+    }
     override fun <T> get(key: String): Attribute<T> {
         NetzachNetwork.sendPacketToServer(DataSourcePacket.Request(id,key))
         return mutable { responsePool[key] as T }

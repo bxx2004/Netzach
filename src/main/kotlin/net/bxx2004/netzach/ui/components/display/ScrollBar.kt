@@ -29,9 +29,9 @@ class ScrollBar : IComponent() {
     var anchor = ref(-1)
     var anchorValue = ref(-1)
     var sliding = ref(false)
-    var background = ref(nrl("textures/ui/scroll_bar/background_light.png"))
+    var background = ref(nrl("textures/ui/scroll_bar/background.png"))
     var thumb = ref(nrl("textures/ui/scroll_bar/thumb_light.png"))
-    var focus = ref(nrl("textures/ui/scroll_bar/hover_tab_background.png"))
+    var focus = ref(nrl("textures/ui/scroll_bar/focus.png"))
     var thumb_hovered = ref(nrl("textures/ui/scroll_bar/thumb_hovered_light.png"))
     var thumb_pressed = ref(nrl("textures/ui/scroll_bar/thumb_pressed_light.png"))
 

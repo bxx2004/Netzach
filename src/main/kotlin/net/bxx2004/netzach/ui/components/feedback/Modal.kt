@@ -15,6 +15,7 @@ import net.bxx2004.netzach.ui.autoHeight
 import net.bxx2004.netzach.ui.autoWidth
 import net.bxx2004.netzach.ui.callback.MouseClickCallback
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Component
 import net.minecraft.world.inventory.AbstractContainerMenu
 import java.awt.Color
 
@@ -45,21 +46,21 @@ class Modal : SlottedComponent(){
         if (id.contains("title")){
             return Text().apply {
                 this.id.setValue("#title")
-                text.setValue("我是一个模态框实例")
+                text.setValue(Component.literal("我是一个模态框实例"))
                 width.v = client().font.width("我是一个模态框实例")
             }
         }
         if (id.contains("close")){
             return Text().apply {
                 this.id.setValue("#close")
-                text.setValue("[x]")
+                text.setValue(Component.literal("[x]"))
                 width.v = 9
                 callback<MouseClickCallback> {
                     show.v = false
                 }
             }
         }
-        return Text().apply { this.id.setValue("#content");text.v = "Empty.";width.setValue(
+        return Text().apply { this.id.setValue("#content");text.v = Component.literal("Empty.");width.setValue(
             client().font.width("Empty.")
         ) }
     }

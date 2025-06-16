@@ -79,11 +79,11 @@ open class UI(handler: AbstractContainerMenu = player()!!.containerMenu, val opt
         )
         context.drawString(
             client().font,
-            "Hit ID: ${hit(mouseX, mouseY).id.v}",0,client().font.lineHeight*2, FastColor.ARGB32.color(-1,255,255,178).toInt(),false
+            "Hit: ${hit(mouseX, mouseY).id.v} | ${hit(mouseX, mouseY).javaClass.simpleName}",0,client().font.lineHeight*2, FastColor.ARGB32.color(-1,255,255,178).toInt(),false
         )
         context.drawString(
             client().font,
-            "Hit Type: ${hit(mouseX, mouseY).javaClass.simpleName}",0,client().font.lineHeight*3, FastColor.ARGB32.color(-1,255,255,178).toInt(),false
+            "Focus: ${getFocus()?.id?.v} | ${getFocus()?.javaClass?.simpleName}",0,client().font.lineHeight*3, FastColor.ARGB32.color(-1,255,255,178).toInt(),false
         )
     }
 

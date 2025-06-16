@@ -20,7 +20,7 @@ class ClientDataSource(override val id: ResourceLocation, val file: File): DataS
 
     val obj = parse()
     fun parse(): JSONObject {
-        if (!file.exists()){
+        if (!file.exists()) {
             file.createNewFile()
             file.writeText("{}")
         }
@@ -30,6 +30,9 @@ class ClientDataSource(override val id: ResourceLocation, val file: File): DataS
         return ref(obj.get(key) as T)
     }
 
+    override fun all(): Map<String, Any> {
+        return obj
+    }
     override fun <T> update(key: String, value: T) {
         obj[key] = value
         file.writeText(obj.toJSONString())

@@ -31,6 +31,15 @@ fun IComponent.middle(){
     y = mutable { (windowSize()[1] - height.v) /2 }
 }
 
+fun IComponent.full(){
+    if (container == null) return
+    if (container !is IComponent) return
+    x = mutable { (container as IComponent).x.v }
+    y = mutable { (container as IComponent).y.v }
+    width = mutable { (container as IComponent).width.v }
+    height = mutable { (container as IComponent).height.v }
+}
+
 fun IComponent.horizontal(direction: String,v:Float){
     when(direction){
         Direction.LEFT -> {

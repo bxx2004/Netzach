@@ -7,19 +7,11 @@ import java.io.Serializable
 
 abstract class Attribute<T>:Serializable{
     var v:T
-        get() = get()
+        get() = getValue()
     set(value){
         setValue(value)
     }
 
-
-    fun set(value: T){
-        setValue(value)
-    }
-
-    fun get():T{
-        return getValue()
-    }
     abstract fun getValueCache():T
     abstract fun getValue(): T
     abstract fun setValue(value: T)

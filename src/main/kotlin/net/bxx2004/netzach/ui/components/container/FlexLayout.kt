@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiGraphics
  * @date  2025/5/2 17:30
  * @description: None
  */
-class FlexLayout : BaseLayout() {
+open class FlexLayout : BaseLayout() {
     var type = ref(FlexType.LEFT)
     var axis = ref(Axis.HORIZONTAL)
     var gap = ref(1)

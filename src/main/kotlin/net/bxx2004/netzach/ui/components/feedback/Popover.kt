@@ -9,6 +9,7 @@ import net.bxx2004.netzach.core.attributes.AttributeReader
 import net.bxx2004.netzach.ui.callback.MouseClickCallback
 import net.bxx2004.netzach.ui.utils.TriggerType
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Component
 import net.minecraft.world.inventory.AbstractContainerMenu
 
 /**
@@ -21,8 +22,8 @@ class Popover : SlottedComponent(){
     private var isClicked = false
     override fun default(id: String): IComponent {
         return when(id){
-            "content" -> Text().apply { this.id.setValue("#content");this.text.setValue("I'm popover") }
-            "trigger" -> Text().apply { this.id.setValue("#trigger");this.text.setValue("You must provide #trigger") }
+            "content" -> Text().apply { this.id.setValue("#content");this.text.setValue(Component.literal("I'm popover")) }
+            "trigger" -> Text().apply { this.id.setValue("#trigger");this.text.setValue(Component.literal("You must provide #trigger")) }
             else -> None()
         }
     }
@@ -35,10 +36,10 @@ class Popover : SlottedComponent(){
         return getSlot("trigger")
     }
     fun fixed(){
-        x.setValue(getSlot("trigger").x.getValue())
-        y.setValue(getSlot("trigger").y.getValue())
-        width.setValue(getSlot("trigger").width.getValue())
-        height.setValue(getSlot("trigger").height.getValue())
+        getSlot("trigger").x = x
+        getSlot("trigger").y = y
+        getSlot("trigger").width = width
+        getSlot("trigger").height = height
     }
 
     override fun onOpen(handler: AbstractContainerMenu?) {

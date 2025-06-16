@@ -2,7 +2,6 @@ package net.bxx2004.netzach.resources.data
 
 import net.bxx2004.netzach.core.attributes.Attribute
 import net.minecraft.resources.ResourceLocation
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * @author 6hisea
@@ -14,6 +13,7 @@ interface DataSource {
     val type :DataSourceType
     fun <T>get(key :String): Attribute<T>
     fun <T>update(key :String,value:T)
+    fun all():Map<String, Any>
 }
 
 enum class DataSourceType {

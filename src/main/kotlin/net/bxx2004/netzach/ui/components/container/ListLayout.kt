@@ -5,6 +5,7 @@ import net.bxx2004.netzach.ui.components.IComponent
 import net.bxx2004.netzach.ui.components.display.Clipped
 import net.bxx2004.netzach.ui.components.display.ScrollBar
 import net.bxx2004.netzach.core.attributes.AttributeReader
+import net.bxx2004.netzach.core.attributes.mutable
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.world.inventory.AbstractContainerMenu
 import kotlin.math.ceil
@@ -16,7 +17,7 @@ import kotlin.math.max
  * @date  2025/5/1 18:41
  * @description: None
  */
-class ListLayout : Clipped() {
+open class ListLayout : Clipped() {
     var gap = ref(4)
     var cell_height = ref(32)
 
@@ -59,15 +60,15 @@ class ListLayout : Clipped() {
                 1
             )
         )
-        scrollBar.max_value.setValue(cache.size-1)
+        scrollBar.max_value.setValue(cache.size)
 
-        val presentCells: Int = (cache.size - 1 - scrollBar.getValue()).coerceAtMost(scrollBar.window.getValue())
+        val presentCells: Int = (cache.size - scrollBar.getValue()).coerceAtMost(scrollBar.window.getValue())
         cache.filter { it.id.getValue() != "scrollbar" }.subList(scrollBar.getValue(),scrollBar.getValue() + presentCells)
             .map {
-                it.x.setValue(0)
-                it.y.setValue(cacheY)
-                it.width.setValue(width.getValue()-scrollBar.width.getValue())
-                it.height.setValue(cell_height.getValue())
+                it.x = ref(0)
+                it.y = ref(cacheY)
+                it.width = mutable { width.getValue()-scrollBar.width.getValue() }
+                it.height = mutable { cell_height.getValue() }
                 cacheY = it.y.getValue() + gap.getValue() + cell_height.getValue()
                 it
             }.forEach {

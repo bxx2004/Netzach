@@ -5,14 +5,19 @@ import net.bxx2004.netzach.core.utils.client
 import net.bxx2004.netzach.ui.components.IComponent
 import net.bxx2004.netzach.ui.components.drawScaleText
 import net.bxx2004.netzach.core.attributes.AttributeReader
+import net.bxx2004.netzach.core.attributes.mutable
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
+import net.minecraft.util.FormattedCharSequence
 
 
-class Text : IComponent(){
+class Text : IComponent() {
     var shadow = ref(false)
-    var text = ref("N/A")
-    var correct = ref(false)
+    var text = ref<Component>(Component.literal("N/A"))
+    var correct = ref(true)
+    var center = ref(true)
+    var color = ref(-1)
+
     override fun render(
         context: GuiGraphics,
         mouseX: Int,
@@ -21,24 +26,44 @@ class Text : IComponent(){
         reader: AttributeReader
     ) {
         val t = text.getValue()
-        val wrapLine = client().font.split(Component.literal(t),width.getValue())
-        if (correct.getValue() && wrapLine.size > 1){
-            height.setValue(client().font.wordWrapHeight(t,width.getValue()))
+        // First split by newlines, then word-wrap each line
+        val newlineSplit = t.string.split("\n")
+        val wrapLines = mutableListOf<FormattedCharSequence>()
+
+        newlineSplit.forEach { line ->
+            val lineComponent = Component.literal(line)
+            wrapLines.addAll(client().font.split(lineComponent, width.getValue()))
         }
-        if (correct.getValue() && wrapLine.size == 1){
-            width.setValue(client().font.width(t))
-            height.setValue(client().font.lineHeight)
+
+        if (correct.getValue()) {
+            if (wrapLines.size > 1) {
+                height = mutable { wrapLines.size * client().font.lineHeight }
+            } else {
+                width = mutable { client().font.width(t) }
+                height = mutable { client().font.lineHeight }
+            }
         }
+
         var i = 0
-        wrapLine.forEach {
-            context.drawScaleText(
-                it,
-                reader.ax,
-                reader.ay + i,
-                reader.z,
-                height.getValue(),
-                shadow.getValue()
-            )
+        wrapLines.forEach { line ->
+            if (center.v){
+                context.drawCenteredString(
+                    client().font,
+                    line,
+                    reader.ax,
+                    reader.ay + i,
+                    -1
+                )
+            }else{
+                context.drawString(
+                    client().font,
+                    line,
+                    reader.ax,
+                    reader.ay + i,
+                    color.v,
+                    shadow.getValue()
+                )
+            }
             i += client().font.lineHeight
         }
     }

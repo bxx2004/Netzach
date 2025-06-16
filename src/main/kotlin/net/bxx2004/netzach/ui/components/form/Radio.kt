@@ -9,6 +9,7 @@ import net.bxx2004.netzach.ui.components.container.SlottedComponent
 import net.bxx2004.netzach.ui.components.display.Text
 import net.bxx2004.netzach.ui.style.Styles
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Component
 
 
 class Radio : SlottedComponent() {
@@ -51,7 +52,7 @@ class Radio : SlottedComponent() {
 
     override fun default(id: String): IComponent {
         val a = Text()
-        a.text.setValue("Radio")
+        a.text.setValue(Component.literal("Radio"))
         a.id.setValue("#text")
         a.addStyle(Styles.ALIGNMENT,"none center")
         return a

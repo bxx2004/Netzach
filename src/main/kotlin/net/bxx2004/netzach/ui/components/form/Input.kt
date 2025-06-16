@@ -1,168 +1,86 @@
 package net.bxx2004.netzach.ui.components.form
 
 import net.bxx2004.netzach.core.attributes.AttributeReader
-import net.bxx2004.netzach.core.attributes.mutable
 import net.bxx2004.netzach.core.attributes.ref
-import net.bxx2004.netzach.core.utils.client
-import net.bxx2004.netzach.core.utils.nrl
-import net.bxx2004.netzach.ui.components.IComponent
-import net.bxx2004.netzach.ui.components.blit
-import net.bxx2004.netzach.ui.components.container.SlottedComponent
-import net.bxx2004.netzach.ui.components.display.Text
-import net.bxx2004.netzach.ui.components.drawScaleText
-import net.bxx2004.netzach.ui.utils.Scissors
+import net.bxx2004.netzach.ui.callback.*
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
-import org.apache.commons.lang3.tuple.MutablePair
 import org.lwjgl.glfw.GLFW
 
-class Input : SlottedComponent() {
-    override var background = ref(nrl("textures/ui/input/background.png"))
-    var focus_texture = ref(nrl("textures/ui/input/focus_texture.png"))
-    var hovered_texture = ref(nrl("textures/ui/input/hovered_texture.png"))
-    var max_length = ref(100)
-    var text = ref("")
-    var cursor_index = ref(MutablePair<Int, Int>(0,0))
+class Input : TextArea() {
+    // 覆盖父类的多行相关属性
+    override var lineHeight = ref(16) // 固定行高
+    override var textWrap = ref(false) // 禁用自动换行
+    var maxLength = ref(Int.MAX_VALUE) // 最大输入长度
 
-
-    override fun default(id: String): IComponent {
-        val pt = Text()
-        pt.id.setValue("#placeholder")
-        pt.width = mutable {
-            width.getValueCache()
-        }
-        pt.height = mutable {
-            height.getValueCache()
-        }
-        pt.text = ref("请输入...")
-        return pt
+    init {
+        // 初始化时设置一些单行输入特有的属性
+        padding.setValue(6) // 调整内边距
     }
 
-    fun backspace(old: Char) {
-        cursor_index.getValue().left = cursor_index.getValue().left-1
-        cursor_index.getValue().right = cursor_index.getValue().right-getCharLength(old)
-    }
-    fun nextspace(old: Char) {
-        cursor_index.getValue().left = cursor_index.getValue().left+1
-        cursor_index.getValue().right = cursor_index.getValue().right+getCharLength(old)
-    }
-
-    fun getCharLength(i: Char): Int{
-        return client().font.width(i.toString()) * (height.getValueCache()/client().font.lineHeight)
-    }
     override fun charTyped(chr: Char, modifiers: Int): Boolean {
-        if (text.getValue().length > max_length.getValue()){
-            return false
-        }
-        if (text.getValue().isEmpty()){
-            text.setValue(text.getValue() + chr.toString())
-        }else{
-            val array = ArrayList<Char>()
-            array.addAll(text.getValue().toList())
-            if (cursor_index.getValue().left >= array.size){
-                array.add(chr)
-            }else{
-                array.add(cursor_index.getValue().left,chr)
-            }
-            text.setValue(array.joinToString(""))
-        }
-        nextspace(chr)
+        // 过滤换行符
+        if (chr == '\n' || chr == '\r') return false
+
+        // 检查长度限制
+        if (text.getValue().length >= maxLength.getValue()) return false
+
         return super.charTyped(chr, modifiers)
     }
 
-    override fun slots(): List<String> {
-        return arrayListOf("placeholder")
-    }
-    fun getCharIndex(mouseX: Int): MutablePair<Int, Int>{
-        val postMouseX = mouseX - x.getValueCache() - (container as IComponent).x.getValueCache()
-        var i = 0
-        var length = 0
-        text.getValue().forEachIndexed { index, value ->
-            if (length >= postMouseX){
-                return@forEachIndexed
-            }
-            i++
-            length += client().font.width(value.toString()) * (height.getValueCache()/client().font.lineHeight)
-        }
-        return MutablePair(i,length)
-    }
-
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        val array = ArrayList<Char>()
-        array.addAll(text.getValue().toList())
-        if (array.isNotEmpty()){
-            when(keyCode){
-                GLFW.GLFW_KEY_BACKSPACE -> {
-                    if (cursor_index.getValue().left != 0){
-                        backspace(array.removeAt(cursor_index.getValue().left-1))
-                    }
-                    text.setValue(array.joinToString(""))
-                }
-                GLFW.GLFW_KEY_RIGHT -> {
-                    if (cursor_index.getValue().left < array.size){
-                        if (cursor_index.getValue().left == 0){
-                            nextspace(array[cursor_index.getValue().left])
-                        }else{
-                            nextspace(array[cursor_index.getValue().left-1])
-                        }
-                    }
-                }
-                GLFW.GLFW_KEY_LEFT -> {
-                    if (cursor_index.getValue().left>0){
-                        backspace(array[cursor_index.getValue().left-1])
-                    }
-                }
-            }
+        // 拦截回车键
+        if (keyCode == GLFW.GLFW_KEY_ENTER) {
+            emitter(EnterPressCallback(id.v))
+            return true
         }
+
+        // 拦截上下箭头键
+        if (keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_DOWN) {
+            return true
+        }
+
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        cursor_index.setValue(getCharIndex(mouseX.toInt()))
-        return super.mouseClicked(mouseX, mouseY, button)
-    }
-    override fun render(
-        context: GuiGraphics,
-        mouseX: Int,
-        mouseY: Int,
-        delta: Float,
-        reader: AttributeReader
-    ) {
-        context.blit(background.getValue(),reader.ax,reader.ay,reader.z,0.0f,0.0f,width.getValue(),height.getValue())
-        if (isHover()){
-            context.blit(hovered_texture.getValue(),reader.ax,reader.ay,reader.z,0.0f,0.0f,width.getValue(),height.getValue())
-        }
-        if (isFocus()){
-            context.blit(focus_texture.getValue(),reader.ax,reader.ay,reader.z,0.0f,0.0f,width.getValue(),height.getValue())
-        }else{
-            cursor_index.setValue(MutablePair(0,0))
-        }
-        if (text.getValue().isEmpty()){
-            getSlot("placeholder").render(context,mouseX, mouseY, delta,reader.cx,reader.cy)
-        }else{
-            Scissors.push(reader.ax,
-                reader.ay,
-                width.getValueCache(),
-                height.getValueCache()
-            )
-            val a = absoluteX()+cursor_index.getValue().right-width.getValueCache()
-            if (a>0){
-                context.pose().translate(-a.toDouble()-1,0.0,0.0)
-            }
-            context.drawScaleText(Component.literal(text.getValue()),
-                reader.ax,
-                reader.ay,reader.z,height.getValueCache(),false
-            )
-            if (isFocus()){
-                context.fill(
-                    cursor_index.getValueCache().right+absoluteX(),
-                    absoluteY()+2,
-                    cursor_index.getValueCache().right+absoluteX()+1,
-                    absoluteY()+height.getValueCache()-2,
-                    -1
-                )
-            }
 
-            Scissors.pop()
+    override fun getWrappedLines(): List<String> {
+        // 单行文本框不需要换行，直接返回整个文本作为一行
+        return listOf(text.getValue())
+    }
+
+    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float, reader: AttributeReader) {
+        // 保存原始值
+        val originalText = text.getValue()
+
+        // 如果正在编辑，临时移除换行符
+        if (isFocus()) {
+            text.setValue(originalText.replace("\n", ""))
         }
+
+        super.render(context, mouseX, mouseY, delta, reader)
+
+        // 恢复原始值
+        if (isFocus()) {
+            text.setValue(originalText)
+        }
+    }
+
+    // 简化版的光标移动逻辑，移除多行相关功能
+    override fun moveCursorUp() = Unit // 禁用上移
+    override fun moveCursorDown() = Unit // 禁用下移
+
+    override fun getLineStart(line: Int): Int = 0 // 总是返回文本开头
+    override fun getLineEnd(line: Int): Int = text.getValue().length // 总是返回文本结尾
+
+    // 添加一个便捷方法设置提示文本
+    fun setPlaceholder(text: String): Input {
+        placeholder.setValue(Component.literal(text))
+        return this
+    }
+
+    // 添加一个便捷方法设置最大长度
+    fun setMaxLength(length: Int): Input {
+        maxLength.setValue(length)
+        return this
     }
 }
